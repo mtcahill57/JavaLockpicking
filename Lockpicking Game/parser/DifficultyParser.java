@@ -2,21 +2,40 @@ package parser;
 
 import java.util.Scanner;
 
-import gamecore.Game.Difficulty;
+import gamecore.Difficulty;
+import gamecore.Difficulty.Level;
 
 public class DifficultyParser {
 
 	private Scanner scanner;
 	
+	// constructor
 	public DifficultyParser(Scanner scanner) {
 		this.scanner = scanner;
 	}
 	
+	// create itemized difficulty prompt
+	private String getDifficultyPrompt() {
+		String difficultyPrompt = "Select difficulty from ";
+		String separator = "";
+		
+		// concat difficulties into prompt
+		for (int i = 0; i < Level.values().length; i++) {
+			difficultyPrompt = difficultyPrompt.concat(separator + Difficulty.getID(Level.values()[i]));
+			
+			// separator to make list "x, y, or z"
+			separator = (i != Level.values().length -2) ? ", " : ", or ";
+		}
+		
+		return difficultyPrompt;
+	}
+	
 	//returns user selected difficulty
-	public Difficulty newDifficultyPromptGet(String prompt) {
+	public Difficulty getDifficulty() {
 		
 		//print prompt
-		System.out.println(prompt);
+		String difficultyPrompt = this.getDifficultyPrompt();
+		System.out.println(difficultyPrompt);
 		
 		Difficulty dif = null;
 		boolean difSelected = false;
@@ -26,33 +45,24 @@ public class DifficultyParser {
 		//loop to find valid difficulty selection
 		while (difSelected == false) {
 			String select = scanner.nextLine();
-			select = select.toLowerCase().trim();
+			select = select.toLowerCase();
 			
-			if (select.contains("easy")) {
-				dif = Difficulty.EASY;
-				difSelected = true;
-				response = "Difficulty Selected: Easy";
+			// check input for valid difficulty id
+			for (Level l : Level.values()) {
+				
+				String id = Difficulty.getID(l);
+				
+				if (select.contains(id.toLowerCase())) {
+					dif = new Difficulty(l);
+					difSelected = true;
+				}
 			}
-			else if (select.contains("intermediate")) {
-				dif = Difficulty.INTERMEDIATE;
-				difSelected = true;
-				response = "Difficulty Selected: Intermediate";
-			}
-			else if (select.contains("hard")) {
-				dif = Difficulty.HARD;
-				difSelected = true;
-				response = "Difficulty Selected: Hard";
-			}
-			else if (select.contains("insane")) {
-				dif = Difficulty.INSANE;
-				difSelected = true;
-				response = "Difficulty Selected: Insane";
+			if (difSelected) {
+				response = "Difficulty Selected: " + dif.getID();
 			}
 			else {
-				response = "Invalid response. Please select from 'Easy' 'Intermediate' 'Hard' or 'Insane'";
-				break;
+				response = "Invalid response. " + difficultyPrompt;
 			}
-			
 			System.out.println(response);
 		}
 		

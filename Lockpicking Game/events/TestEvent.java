@@ -16,6 +16,11 @@ public class TestEvent extends AbstractEvent {
 	}
 
 	@Override
+	public boolean needsPin() {
+		return true;
+	}
+	
+	@Override
 	public EventType getType() {
 		return EventType.TEST;
 	}

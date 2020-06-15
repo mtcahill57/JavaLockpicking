@@ -5,12 +5,7 @@ import events.Event;
 public class Game {
 
 	private static Core core = null;
-	private static boolean completed;
-	
-	//enum for difficulty
-	public enum Difficulty {
-		EASY, INTERMEDIATE, HARD, INSANE;
-	}
+	private static boolean completed = false;
 	
 	//game constructor
 	public Game(Difficulty dif) {
@@ -26,16 +21,18 @@ public class Game {
 	//sends the event to be processed at the core, a call to exit will mark the game as complete
 	public void processEvent(Event e) {
 		
-		//core will process the event and return a string representing the internal change
-		System.out.println(core.processEvent(e));
-		
-		switch (e.getType()) { //test for exit
-		case EXIT:
-			setComplete(true); //end the game
-			break;
-		
-		default: //all other events
-			break;
+		if (!completed) {
+			
+			System.out.println(core.processEvent(e)); //core will process the event and return a string representing the internal change
+			
+			switch (e.getType()) { //test for exit
+			case EXIT:
+					setComplete(true); //end the game
+					break;
+			
+			default: //all other events
+					break;
+			}
 		}
 	}
 	

@@ -3,7 +3,7 @@
  */
 package gamecore;
 
-import gamecore.Game.Difficulty;
+import gamecore.Difficulty;
 import events.Event;
 import pins.*;
 import pins.Pin.PinType;
@@ -24,7 +24,7 @@ public class Core {
 	private String numSetPinsHint = (hintsEnabled) ? (" There are " + numSetPins() + " pins set.") : ("");
 	
 	public Core(Difficulty dif) {
-		this.numPins = setNumPins(dif);
+		this.numPins = dif.getNumPins();
 		this.pins = createPins(this.numPins, dif);
 		this.tensioned = false;
 		this.hintsEnabled = false;
@@ -103,27 +103,12 @@ public class Core {
 		return true; //if all true set, game complete
 	}
 	
-	//sets the number of pins in the core by difficulty
-	private int setNumPins(Difficulty dif) {
-		switch (dif) {
-		case EASY: //4 pins
-			return 4;
-		case INTERMEDIATE: //5 pins
-			return 5;
-		case HARD: //5 pins
-			return 5;
-		case INSANE: //6 pins
-			return 6;
-		}
-		return 0; //shouldn't happen
-	}
-	
 	//sets pin types based on difficulty
 	private Pin[] createPins(int numPins, Difficulty dif) {
 		
 		Pin[] pins = new Pin[numPins];
 		
-		switch (dif) {
+		switch (dif.getLevel()) {
 		case EASY: //all normal
 			for (int i = 0; i < numPins; i++) {
 				pins[i] = PinFactory.newPin(PinType.NORMAL, i);

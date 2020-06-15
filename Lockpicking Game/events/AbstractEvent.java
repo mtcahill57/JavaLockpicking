@@ -2,6 +2,10 @@ package events;
 
 abstract class AbstractEvent implements Event {
 	
+	public boolean needsPin() {
+		return false;
+	}
+	
 	public EventType getType() {
 		return null;
 	}

@@ -32,4 +32,7 @@ public class EventFactory {
 		return null; //shouldn't happen
 	}
 	
+	public static boolean needsPin(EventType type) {
+		return newEvent(type, 0).needsPin();
+	}
 }

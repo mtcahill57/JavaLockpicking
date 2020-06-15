@@ -1,7 +1,6 @@
 package parser;
 
 import java.util.Scanner;
-
 import gamecore.Game;
 import events.Event;
 import events.EventFactory;
@@ -11,34 +10,42 @@ public class EventParser {
 	
 	private Scanner scanner;
 	private String questionPrompt = "What action would you like to perform?";
+	private String actionPrompt = getActionPrompt();
 	
-	//actions initialized on constructor call
-	private String actionPrompt = "Select from ";
-	
-	//parser constructor sets up scanner and creates the action list prompt
-	public EventParser(Scanner scanner) { //parser will be called from main to get an event
+	// constructor
+	public EventParser(Scanner scanner) {
 		this.scanner = scanner;
-		
-		//load actions into prompt
-		for (EventType e : EventType.values()) {
-			actionPrompt = actionPrompt.concat(e.getAction().toUpperCase() + ", ");
-		}
-		//trim last comma
-		actionPrompt = actionPrompt.substring(0, actionPrompt.length()-2);
 	}
 	
-	//prompts user input for event
+	// action prompt created based on event types
+	private String getActionPrompt() {
+		String actionPrompt = "Select from ";
+		String separator = "";
+		
+		// concat actions into prompt
+		for (int i = 0; i < EventType.values().length; i++) {
+			EventType e = EventType.values()[i];
+			
+			actionPrompt = actionPrompt.concat(separator + e.getAction());
+			
+			// separator to make list "x, y, or z"
+			separator = (i != EventType.values().length -2) ? ", " : ", or ";
+		}
+		return actionPrompt;
+	}
+	
+	// prompts user input for event
 	public Event getNextEvent() {
 		
-		//prompt
+		// prompt
 		System.out.println(questionPrompt + "\n" + actionPrompt);
 		
-		//get event type from input
+		// get event type from input
 		EventType type = parseEventType();
 		
-		//input pin if necessary
+		// input pin if necessary
 		int pin = 0;
-		if (type.equals(EventType.LIFT) || type.equals(EventType.TEST)) {
+		if (EventFactory.needsPin(type)) {
 			String action = type.getAction();
 			pin = parsePin(action);
 		}

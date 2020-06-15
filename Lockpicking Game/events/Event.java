@@ -14,9 +14,10 @@ public interface Event {
 		
 		private EventType(String action) {
 			this.action = action;
-		}
-		
+		}		
 	}
+	
+	public boolean needsPin();
 	
 	public int getPin();
 	
